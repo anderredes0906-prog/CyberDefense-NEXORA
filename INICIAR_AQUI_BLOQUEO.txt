@@ -1,0 +1,12 @@
+CYBERDEFENSE NEXORA — CONTROL DE BLOQUEOS
+
+Novedad: 3 intentos de acceder a /empresa/administracion sin permisos durante 120 segundos provocan un bloqueo de 300 segundos para la combinación usuario + IP. Se rechazan solicitudes al portal /empresa con HTTP 403. No se bloquea el teléfono, Internet ni otras páginas. El administrador conserva acceso a CyberDefense y puede desbloquear desde /admin/bloqueos.
+
+INSTALACIÓN:
+1) Respaldar CyberDefense y cyberdefense.db. Detener Python (Ctrl+C).
+2) Copiar los archivos de este ZIP (carpeta CyberDefense) encima del proyecto actual. Mantener el archivo cyberdefense.db original y .venv.
+3) Ejecutar: .\.venv\Scripts\python.exe app.py
+4) Probar con demo / Demo123!; abrir /empresa/panel y pulsar tres veces «Intentar acceder a administración» en menos de 120 s. A continuación se muestra 403 incluso para /empresa. Administrador: /admin/bloqueos para desbloquear.
+5) Para empezar de cero, la función Vaciar historial reinicia también los bloqueos y crea un respaldo.
+
+ATENCIÓN: 127.0.0.1 es solo loopback de tu PC. Un celular no podrá probar la página desde otra máquina con esa configuración; eso necesita exponer de forma segura la aplicación en la LAN con un servidor adecuado. No publicar el servidor de desarrollo Flask en Internet. No confiar en cabeceras de IP enviadas por el cliente. IP+usuario no identifica de forma única un celular.

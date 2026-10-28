@@ -1,0 +1,17 @@
+CYBERDEFENSE + NEXORA DIGITAL | VENTAS Y MONITOREO
+
+1. Descomprime en una NUEVA carpeta para evitar perder tu versión anterior.
+2. Dentro de CyberDefense, ejecuta:
+   py -3 -m venv .venv
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   .\.venv\Scripts\python.exe app.py
+3. Página corporativa: http://127.0.0.1:5000/empresa
+4. Inicio de sesión: http://127.0.0.1:5000/
+5. Empleado: demo / Demo123! (solo para pruebas locales)
+6. Administrador: admin / clave generada al primer inicio en terminal.
+7. La vista empleado permite registrar ventas y consultar totales; el administrador ve el monitoreo.
+8. Acceder a /empresa/administracion sin permisos genera alertas y eventualmente bloqueos.
+9. Para reutilizar los registros anteriores, COPIA manualmente tu cyberdefense.db respaldada al lado de app.py ANTES de iniciar la nueva versión.
+10. La aplicación está diseñada para móvil, pero el servidor Flask usa 127.0.0.1; no está publicado a teléfonos de la red.
+11. No usar el servidor de desarrollo Flask en Internet. Cambia las credenciales de prueba antes de distribuir.
+12. Si mantienes tu base anterior, las nuevas tablas de ventas se crean automáticamente; no se borran los incidentes.

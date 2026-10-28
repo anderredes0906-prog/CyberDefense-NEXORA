@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<section class='lab-shell'><article class='card demo-panel'><p class='eyebrow'>ACCESO AUTORIZADO</p><h1>Bienvenido, {{session.username}}</h1><p class='muted'>Tu sesión está activa.</p><a class='main-cta' href="{{url_for('empresa_panel')}}">Abrir registro de ventas ↗</a></article></section>{% endblock %}

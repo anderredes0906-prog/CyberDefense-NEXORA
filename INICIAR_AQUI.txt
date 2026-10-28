@@ -1,0 +1,23 @@
+CYBERDEFENSE + NEXORA DIGITAL — NUEVA DEMO INDEPENDIENTE
+
+1) DESCOMPRIME EN UNA CARPETA NUEVA (por ejemplo Escritorio\CyberDefense_NEXORA).
+   Este ZIP NO incluye cyberdefense.db: el historial comienza realmente en cero.
+   No copies tu base de datos anterior si quieres iniciar sin actividad.
+2) Abre VS Code en la carpeta CyberDefense que viene dentro del ZIP.
+3) En PowerShell:
+   py -3 -m venv .venv
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   .\.venv\Scripts\python.exe app.py
+4) Abre http://127.0.0.1:5000/empresa
+   Usuario demo: demo / Demo123!
+   Usuario admin: admin / contraseña generada en la terminal durante el PRIMER inicio.
+5) PRUEBA:
+   - Abre la empresa ficticia y pulsa Entrar al portal.
+   - Inicia sesión como demo, entra en el portal de la empresa.
+   - Intenta abrir Administración: HTTP 403 y evento en el Dashboard.
+   - Cierra sesión, inicia como admin y revisa Monitoreo / Laboratorio / Reportes.
+   - Si quieres empezar otra presentación sin historial: Panel SOC > Vaciar historial (se crea respaldo).
+6) No hay Conexiones Web, PHP ni ningún módulo de sistemas externos.
+7) El servidor por defecto usa 127.0.0.1; la interfaz es responsive para móvil,
+   pero abrirlo desde un teléfono separado requiere configurar una red de confianza y un servidor seguro.
+8) Sólo demostración educativa, no antivirus, WAF ni protección de aplicaciones externas.

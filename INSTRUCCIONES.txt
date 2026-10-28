@@ -1,0 +1,26 @@
+CYBERDEFENSE — EDICIÓN INDEPENDIENTE Y RESPONSIVE
+
+NO INCLUYE CONEXIONES WEB, PHP NI SISTEMAS EXTERNOS.
+
+INSTALAR SOBRE TU VERSION ACTUAL (CONSERVAR DATOS):
+1. Deten Python en VS Code: Ctrl+C.
+2. Haz respaldo completo de C:\Users\ander\Desktop\CyberDefense.
+3. Del ZIP copia app.py, requirements.txt, templates y static sobre esa carpeta.
+4. CONSERVA tu cyberdefense.db y .venv. No copies bases de datos de otra versión.
+5. En PowerShell, dentro de CyberDefense:
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   .\.venv\Scripts\python.exe app.py
+6. Abre http://127.0.0.1:5000 y entra como admin con tu clave actual.
+7. Revisa Dashboard, Laboratorio, Reportes y Modo exposición.
+
+INSTALACIÓN LIMPIA (SIN DATOS ANTERIORES):
+   py -3 -m venv .venv
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   .\.venv\Scripts\python.exe app.py
+   En el primer arranque se mostrará la clave de admin en terminal.
+
+NOTAS:
+- La versión sin conexiones NO utiliza CYBERDEFENSE_CONNECTOR_MASTER_KEY ni CD_SYSTEM_ID.
+- Está diseñada para PC y celular, pero 127.0.0.1 solo abre en el equipo que ejecuta Flask.
+- Para acceder desde otro celular se necesitaría una red y servidor apropiados; NO publicar el servidor de desarrollo Flask en Internet.
+- No es un antivirus ni un firewall de red; el monitoreo protege el login de esta aplicación y el laboratorio es didáctico.

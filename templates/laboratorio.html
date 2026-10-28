@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<section class="lab-shell">
+  <nav class="lab-top"><a class="export-button" href="{{url_for('dashboard')}}">← Volver al Centro de Monitoreo</a><span class="live">● ENTORNO LOCAL CONTROLADO</span></nav>
+  <div class="heading"><p class="eyebrow">CYBERDEFENSE / LABORATORIO</p><h1>Laboratorio de amenazas</h1><p class="muted">En esta usuariostración, NEXORA DIGITAL es la portal corporativo que estamos protegiendo. Selecciona un escenario y observa la defensa y la evidencia. Son pruebas internas; no atacan páginas reales.</p></div>
+  <div class="lab-grid">
+  {% for slug, case in cases.items() %}
+    <article class="card lab-card"><span class="lab-number">ESCENARIO 0{{loop.index}}</span><h2>{{case.title}}</h2><p class="muted">{{case.test}}</p><form class="lab-form" method="post" action="{{url_for('lab_simulate')}}"><input type="hidden" name="csrf_token" value="{{csrf_token}}"><input type="hidden" name="scenario" value="{{slug}}"><button type="submit">Ejecutar simulación →</button></form></article>
+  {% endfor %}
+  </div>
+  <article class="card lab-results"><div class="row"><div><h2>Resultado de la simulación</h2><p class="muted">Se mostrarán las evidencias y la respuesta defensiva.</p></div><span id="lab-state" class="live">Esperando simulación</span></div><div id="lab-message" role="status" aria-live="polite">Selecciona uno de los cuatro escenarios.</div><div id="lab-detail" hidden><div class="lab-info"><strong>Detección</strong><p id="lab-detection"></p></div><div class="lab-info"><strong>Defensa</strong><p id="lab-defense"></p></div><h3>Evidencia</h3><pre id="lab-evidence"></pre></div></article>
+  <p class="muted caption-note">Todos los eventos se almacenan en SQLite. Abre el Dashboard y filtra por “Laboratorio” para verlos. Las simulaciones no reemplazan una auditoría de seguridad real.</p>
+</section>
+<script src="{{url_for('static', filename='laboratorio.js')}}"></script>
+{% endblock %}
