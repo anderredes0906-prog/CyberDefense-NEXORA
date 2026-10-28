@@ -1,5 +1,13 @@
+# Privados y entorno local
 .venv/
 __pycache__/
 *.pyc
-cyberdefense.db
 .env
+.env.*
+cyberdefense.db
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+*.log
+respaldo_actividad_*

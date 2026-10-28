@@ -16,10 +16,15 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 
 ROOT = Path(__file__).resolve().parent
-DB = ROOT / 'cyberdefense.db'
+DB = Path(os.environ.get('CYBERDEFENSE_DB_PATH', str(ROOT / 'cyberdefense.db')))
 app = Flask(__name__)
+IS_RENDER = bool(os.environ.get('RENDER'))
+IS_PUBLIC = IS_RENDER or os.environ.get('CYBERDEFENSE_PUBLIC') == '1'
+if IS_PUBLIC and not os.environ.get('CYBERDEFENSE_SECRET'):
+    raise RuntimeError('Configura CYBERDEFENSE_SECRET en Render antes de iniciar.')
 app.secret_key = os.environ.get('CYBERDEFENSE_SECRET') or secrets.token_hex(32)
-app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax')
+app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',
+                  SESSION_COOKIE_SECURE=IS_PUBLIC)
 LIMIT = 5
 WINDOW = 60
 BLOCK_SECONDS = 60
@@ -46,9 +51,18 @@ def init_db():
         c.execute('CREATE TABLE IF NOT EXISTS company_limits (identity TEXT PRIMARY KEY, username TEXT NOT NULL, source TEXT NOT NULL, first_attempt INTEGER NOT NULL, attempts INTEGER NOT NULL, blocked_until INTEGER NOT NULL DEFAULT 0)')
         c.execute('CREATE TABLE IF NOT EXISTS ventas (id INTEGER PRIMARY KEY AUTOINCREMENT, created INTEGER NOT NULL, empleado TEXT NOT NULL, producto TEXT NOT NULL, cantidad INTEGER NOT NULL, precio_centavos INTEGER NOT NULL, total_centavos INTEGER NOT NULL)')
         if not c.execute('SELECT 1 FROM users WHERE username=?', ('demo',)).fetchone():
-            c.execute('INSERT INTO users(username,password_hash,role) VALUES(?,?,?)', ('demo', generate_password_hash('Demo123!'), 'user'))
+            # Nunca publicar una cuenta con contraseña conocida.
+            demo_password = os.environ.get('CYBERDEFENSE_DEMO_PASSWORD')
+            if demo_password:
+                c.execute('INSERT INTO users(username,password_hash,role) VALUES(?,?,?)',
+                          ('demo', generate_password_hash(demo_password), 'user'))
+            elif not IS_PUBLIC:
+                c.execute('INSERT INTO users(username,password_hash,role) VALUES(?,?,?)',
+                          ('demo', generate_password_hash('Demo123!'), 'user'))
         if not c.execute('SELECT 1 FROM users WHERE username=?', ('admin',)).fetchone():
             password = os.environ.get('CYBERDEFENSE_ADMIN_PASSWORD')
+            if IS_PUBLIC and (not password or len(password) < 12):
+                raise RuntimeError('Configura CYBERDEFENSE_ADMIN_PASSWORD (minimo 12 caracteres) en Render.')
             if not password:
                 password = secrets.token_urlsafe(15)
                 print('\n' + '='*60 + '\nCLAVE ADMIN INICIAL (guardar): ' + password + '\n' + '='*60 + '\n')
@@ -489,7 +503,7 @@ def limpiar_actividad():
         return redirect(url_for('dashboard'))
     # Copia verificable antes de vaciar actividad, preservando los usuarios.
     with db() as source:
-        backup = ROOT / ('respaldo_actividad_' + local_datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.db')
+        backup = DB.parent / ('respaldo_actividad_' + local_datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.db')
         with sqlite3.connect(backup) as target:
             source.backup(target)
         source.execute('DELETE FROM events')
@@ -504,6 +518,8 @@ def logout():
     return redirect(url_for('home'))
 
 
+# Inicializar al importar el modulo: obligatorio para Gunicorn (app:app).
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     app.run(host='127.0.0.1', port=5000, debug=False)
